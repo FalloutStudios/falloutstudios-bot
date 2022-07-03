@@ -1,2 +1,3 @@
 # falloutstudios-bot
- Bot for FalloutStudios Discord server
+
+Bot for FalloutStudios Discord server

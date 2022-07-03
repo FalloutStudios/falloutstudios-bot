@@ -1,0 +1,38 @@
+messages:
+  - id: "993140978565267506"
+    channelId: "993115608881311864"
+    content:
+    multiple: false
+    dontEdit: false
+    embeds:
+      - title: Pronouns
+        description: Select your pronouns
+        color: BLUE
+    roles:
+      - id: "993142540431794256"
+        name: She/Her
+        description: eg. She is with her mother.
+      - id: "993142704861106226"
+        name: They/Them
+        description: eg. You just ruined their day.
+      - id: "993142618101928026"
+        name: He/Him
+        description: eg. He's gay
+      - id: "993142742693707867"
+        name: Ask Pronouns
+  - id: "993145227143557210"
+    channelId: "993115608881311864"
+    content:
+    multiple: false
+    dontEdit: false
+    embeds:
+      - title: Pings
+        description: Choose which announcements want to follow.
+        color: BLUE
+    roles:
+      - id: "993144868123705394"
+        name: Announcements
+        description: Server and development announcements.
+      - id: "993145041868574800"
+        name: Updates
+        description: Projects updates
