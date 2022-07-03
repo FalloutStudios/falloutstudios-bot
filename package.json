@@ -6,7 +6,8 @@
         "clean": "rm -rf modules",
         "build": "yarn clean && npx tsc",
         "test": "yarn build && yarn start",
-        "start": "npx reciple"
+        "start": "npx reciple",
+        "postinstall": "yarn build"
     },
     "version": "1.0.0",
     "dependencies": {
