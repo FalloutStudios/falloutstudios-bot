@@ -26,6 +26,31 @@ messages:
     multiple: false
     dontEdit: false
     embeds:
+      - title: Color
+        description: Select your color
+        color: BLUE
+    roles:
+      - id: "993145802031640646"
+        name: "Pink"
+        emoji: 🌸
+      - id: "993364141349806141"
+        name: "Purple"
+        emoji: 💜
+      - id: "993364491221876746"
+        name: "Yellow"
+        emoji: ⭐
+      - id: "993368313625333881"
+        name: "Icy"
+        emoji: ❄️
+      - id: "993368188790255656"
+        name: "Green"
+        emoji: 🍀
+  - id: "993368861317550231"
+    channelId: "993115608881311864"
+    content:
+    multiple: false
+    dontEdit: false
+    embeds:
       - title: Pings
         description: Choose which announcements want to follow.
         color: BLUE
