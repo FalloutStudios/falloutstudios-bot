@@ -28,15 +28,14 @@ export interface RolesConfig {
 }
 
 export class Roles implements RecipleScript {
-    public versions: string = '1.6.x';
+    public versions: string = '1.7.x';
     public client?: RecipleClient;
     public config: RolesConfig = Roles.getConfig();
-    public logger: Logger = new Logger('Roles');
+    public logger!: Logger;
 
     public onStart(client: RecipleClient): boolean {
         this.client = client;
-        this.logger = this.client.logger.cloneLogger();
-        this.logger.defaultPrefix = 'Roles';
+        this.logger = this.client.logger.cloneLogger({ loggerName: 'Roles' });
 
         this.logger.info('Starting Roles');
 

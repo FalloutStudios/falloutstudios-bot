@@ -12,7 +12,7 @@ export interface WelcomerConfig {
 }
 
 export class Welcomer implements RecipleScript {
-    public versions: string = '1.6.x';
+    public versions: string = '1.7.x';
     public config: WelcomerConfig = Welcomer.getConfig();
     public welcome!: TextBasedChannel;
     public goodbye?: TextBasedChannel;
