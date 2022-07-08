@@ -4,7 +4,7 @@ import { errorEmbed } from './_errorEmbed';
 import ms from 'ms';
 
 export default new (class implements RecipleScript {
-    public versions: string[] = ['1.6.x'];
+    public versions: string = '1.6.x';
     public commands: recipleCommandBuilders[] = [];
 
     public onStart(client: RecipleClient) {
