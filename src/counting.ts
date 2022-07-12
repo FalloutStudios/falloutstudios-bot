@@ -4,7 +4,7 @@ import path from 'path';
 import yml from 'yaml';
 
 export class Counting implements RecipleScript {
-    public versions: string = '1.7.x';
+    public versions: string = '2.x.x';
     public channels: string[] = Counting.getConfig();
 
     public onStart(client: RecipleClient<boolean>): boolean | Promise<boolean> {

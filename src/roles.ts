@@ -28,7 +28,7 @@ export interface RolesConfig {
 }
 
 export class Roles implements RecipleScript {
-    public versions: string = '1.7.x';
+    public versions: string = '2.x.x';
     public client?: RecipleClient;
     public config: RolesConfig = Roles.getConfig();
     public logger!: Logger;

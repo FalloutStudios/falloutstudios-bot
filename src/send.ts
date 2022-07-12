@@ -5,14 +5,14 @@ import { InteractionCommandBuilder, MessageCommandBuilder, RecipleClient, Recipl
 import { errorEmbed } from './_errorEmbed';
 
 export class SendMessage implements RecipleScript {
-    public versions: string = '1.7.x';
+    public versions: string = '2.x.x';
     public commands: (MessageCommandBuilder | InteractionCommandBuilder)[] = [];
     
     public onStart(client: RecipleClient) {
         this.commands = [
             (new InteractionCommandBuilder()
                 .setName('send')
-                .setRequiredPermissions(['ADMINISTRATOR'])
+                .setRequiredMemberPermissions(['ADMINISTRATOR'])
                 .setDescription('Sends a message to channel')
                 .addSubcommand(text => text
                     .setName('text')
@@ -155,7 +155,7 @@ export class SendMessage implements RecipleScript {
             new MessageCommandBuilder()
                 .setName('send-text')
                 .addAliases('say')
-                .setRequiredPermissions(['ADMINISTRATOR'])
+                .setRequiredMemberPermissions(['ADMINISTRATOR'])
                 .setDescription('Sends a message to current channel')
                 .addOption(text => text
                     .setName('message')

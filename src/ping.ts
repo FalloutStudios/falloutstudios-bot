@@ -1,11 +1,11 @@
-import { InteractionCommandBuilder, MessageCommandBuilder, RecipleClient, recipleCommandBuilders, RecipleScript } from 'reciple';
+import { InteractionCommandBuilder, MessageCommandBuilder, RecipleClient, RecipleCommandBuilders, RecipleScript } from 'reciple';
 import { Message, MessageEmbed } from 'discord.js';
 import { errorEmbed } from './_errorEmbed';
 import ms from 'ms';
 
 export default new (class implements RecipleScript {
-    public versions: string = '1.7.x';
-    public commands: recipleCommandBuilders[] = [];
+    public versions: string = '2.x.x';
+    public commands: RecipleCommandBuilders[] = [];
 
     public onStart(client: RecipleClient) {
         this.commands = [

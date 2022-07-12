@@ -12,7 +12,7 @@ export interface AnnouncerConfig {
 }
 
 export class Announcer implements RecipleScript {
-    public versions: string = '1.7.x';
+    public versions: string = '2.x.x';
     public config: AnnouncerConfig = Announcer.getConfig();
     public channels: TextChannel[] = [];
     public commands: (InteractionCommandBuilder)[] = [];
@@ -24,7 +24,7 @@ export class Announcer implements RecipleScript {
             new InteractionCommandBuilder()
                 .setName('announce')
                 .setDescription('Announce something')
-                .setRequiredPermissions(['SEND_MESSAGES'])
+                .setRequiredMemberPermissions(['SEND_MESSAGES'])
                 .addStringOption(color => color
                     .setName('color')
                     .setDescription('The color of the announcement embed')
