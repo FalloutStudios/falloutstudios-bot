@@ -1,8 +1,22 @@
-import yml from 'yaml';
+import { createConfig } from './_createConfig';
+
+import {
+    ActionRowBuilder,
+    ChannelType,
+    ColorResolvable,
+    EmbedBuilder,
+    GuildTextBasedChannel,
+    MessageOptions,
+    ModalBuilder,
+    TextChannel,
+    TextInputBuilder,
+    TextInputStyle,
+    ThreadAutoArchiveDuration,
+    User,
+} from 'discord.js';
 import path from 'path';
 import { InteractionCommandBuilder, RecipleClient, RecipleScript } from 'reciple';
-import { createConfig } from './_createConfig';
-import { AnyChannel, ColorResolvable, MessageActionRow, MessageEmbed, MessageOptions, Modal, TextChannel, TextInputComponent, User } from 'discord.js';
+import yml from 'yaml';
 
 export interface AnnouncerConfig {
     announcementsChannels: string[];
@@ -12,9 +26,9 @@ export interface AnnouncerConfig {
 }
 
 export class Announcer implements RecipleScript {
-    public versions: string = '2.x.x';
+    public versions: string = '^3.0.0';
     public config: AnnouncerConfig = Announcer.getConfig();
-    public channels: TextChannel[] = [];
+    public channels: GuildTextBasedChannel[] = [];
     public commands: (InteractionCommandBuilder)[] = [];
 
     public onStart(client: RecipleClient) {
@@ -24,7 +38,7 @@ export class Announcer implements RecipleScript {
             new InteractionCommandBuilder()
                 .setName('announce')
                 .setDescription('Announce something')
-                .setRequiredMemberPermissions(['SEND_MESSAGES'])
+                .setRequiredMemberPermissions('SendMessages')
                 .addStringOption(color => color
                     .setName('color')
                     .setDescription('The color of the announcement embed')
@@ -86,7 +100,7 @@ export class Announcer implements RecipleScript {
                     const title = submit.fields.getTextInputValue('announcer-modal-title');
                     const content = submit.fields.getTextInputValue('announcer-modal-content');
 
-                    const embed = new MessageEmbed()
+                    const embed = new EmbedBuilder()
                         .setAuthor({ name: (user || channel) ? `Announcement` : interaction.guild?.name!, iconURL: client.user?.displayAvatarURL() })
                         .setDescription(content);
 
@@ -126,13 +140,13 @@ export class Announcer implements RecipleScript {
         return sent;
     }
 
-    public async sendToChannel(content: MessageOptions, user?: User, channel?: AnyChannel) {
+    public async sendToChannel(content: MessageOptions, user?: User, channel?: GuildTextBasedChannel) {
         let sent = 0;
         if (user) {
             await user.send(content).catch(() => { sent--; });
             sent++;
         }
-        if (channel?.type == 'GUILD_TEXT') {
+        if (channel?.isTextBased()) {
             await channel.send(content).catch(() => { sent--; });
             sent++;
         }
@@ -146,7 +160,7 @@ export class Announcer implements RecipleScript {
         const channels = this.config.announcementsChannels;
         for (const channelId of channels) {
             const channel = client.channels.cache.get(channelId) ?? await client.channels.fetch(channelId).catch(() => {}) ?? undefined;
-            if (channel?.type === 'GUILD_TEXT') this.channels.push(channel);
+            if (channel?.type == ChannelType.GuildText) this.channels.push(channel);
         }
 
         client.logger.info(`Announcer loaded ${this.channels.length} channels`);
@@ -166,7 +180,7 @@ export class Announcer implements RecipleScript {
             if (this.config.createThreadsForAnnouncements && message) {
                 message.startThread({
                     name: message.embeds?.[0]?.title ?? 'Announcement',
-                    autoArchiveDuration: 'MAX',
+                    autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
                     reason: 'Announcement'
                 }).catch(() => {});
             }
@@ -174,28 +188,28 @@ export class Announcer implements RecipleScript {
     }
 
     public getModal() {
-        return new Modal()
+        return new ModalBuilder()
             .setCustomId('announcer-modal')
             .setTitle('Create Announcement')
             .setComponents(
-                new MessageActionRow<TextInputComponent>()
+                new ActionRowBuilder<TextInputBuilder>()
                     .setComponents([
-                        new TextInputComponent()
+                        new TextInputBuilder()
                             .setCustomId('announcer-modal-title')
                             .setLabel('Announcement Title')
                             .setPlaceholder('Very important announcement')
                             .setMaxLength(100)
-                            .setStyle('SHORT')
+                            .setStyle(TextInputStyle.Short)
                             .setRequired(false),
                     ]),
-                new MessageActionRow<TextInputComponent>()
+                new ActionRowBuilder<TextInputBuilder>()
                     .setComponents([
-                        new TextInputComponent()
+                        new TextInputBuilder()
                             .setCustomId('announcer-modal-content')
                             .setLabel('Announcement Content')
                             .setPlaceholder('You can use markdown here')
                             .setMaxLength(2000)
-                            .setStyle('PARAGRAPH')
+                            .setStyle(TextInputStyle.Paragraph)
                             .setRequired(true),
                     ])
             );

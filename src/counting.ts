@@ -1,10 +1,11 @@
-import { RecipleClient, RecipleScript } from 'reciple';
 import { createConfig } from './_createConfig';
+
 import path from 'path';
+import { RecipleClient, RecipleScript } from 'reciple';
 import yml from 'yaml';
 
 export class Counting implements RecipleScript {
-    public versions: string = '2.x.x';
+    public versions: string = '^3.0.0';
     public channels: string[] = Counting.getConfig();
 
     public onStart(client: RecipleClient<boolean>): boolean | Promise<boolean> {

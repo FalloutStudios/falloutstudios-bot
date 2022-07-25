@@ -1,9 +1,9 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 export function errorEmbed(message: string, positive: boolean = false, useAuthorField: boolean = true) {
-    const embed = new MessageEmbed();
+    const embed = new EmbedBuilder();
 
-    embed.setColor(positive ? 'GREEN' : 'RED');
+    embed.setColor(positive ? 'Green' : 'Red');
 
     if (message.indexOf('\n') > -1) {
         embed.setDescription(message);

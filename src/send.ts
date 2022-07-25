@@ -1,18 +1,19 @@
-import { ColorResolvable, MessageEmbed, TextChannel } from 'discord.js';
+import { errorEmbed } from './_errorEmbed';
+
+import { ColorResolvable, Colors, EmbedBuilder, InteractionType, TextChannel } from 'discord.js';
 import { replaceAll } from 'fallout-utility';
 import { escapeRegExp } from 'fallout-utility/dist/scripts/escapeRegExp';
 import { InteractionCommandBuilder, MessageCommandBuilder, RecipleClient, RecipleScript } from 'reciple';
-import { errorEmbed } from './_errorEmbed';
 
 export class SendMessage implements RecipleScript {
-    public versions: string = '2.x.x';
+    public versions: string = '^3.0.0';
     public commands: (MessageCommandBuilder | InteractionCommandBuilder)[] = [];
     
     public onStart(client: RecipleClient) {
         this.commands = [
             (new InteractionCommandBuilder()
                 .setName('send')
-                .setRequiredMemberPermissions(['ADMINISTRATOR'])
+                .setRequiredMemberPermissions('ManageChannels')
                 .setDescription('Sends a message to channel')
                 .addSubcommand(text => text
                     .setName('text')
@@ -134,7 +135,7 @@ export class SendMessage implements RecipleScript {
                             await interaction.reply({ content: `Sending Embed`, ephemeral: true });
                             if (!sendTo) return interaction.editReply({ content: `No channel found` });
 
-                            const embed = new MessageEmbed();
+                            const embed = new EmbedBuilder();
                             
                             if (authorName) embed.setAuthor({ name: authorName, iconURL: authorIconUrl, url: authorUrl });
                             if (title) embed.setTitle(title);
@@ -155,7 +156,7 @@ export class SendMessage implements RecipleScript {
             new MessageCommandBuilder()
                 .setName('send-text')
                 .addAliases('say')
-                .setRequiredMemberPermissions(['ADMINISTRATOR'])
+                .setRequiredMemberPermissions('ManageChannels')
                 .setDescription('Sends a message to current channel')
                 .addOption(text => text
                     .setName('message')
@@ -176,7 +177,7 @@ export class SendMessage implements RecipleScript {
         ];
         
         client.on('interactionCreate', async interaction => {
-            if (!interaction.isAutocomplete()) return;
+            if (interaction.type !== InteractionType.ApplicationCommandAutocomplete) return;
             if (interaction.commandName !== 'send') return;
 
             const text = interaction.options.getFocused() ?? undefined;
@@ -189,7 +190,7 @@ export class SendMessage implements RecipleScript {
     }
 
     public static getColors(filter?: string) {
-        const colors: ColorResolvable[] = ['DEFAULT', 'WHITE', 'AQUA', 'GREEN', 'BLUE', 'YELLOW', 'PURPLE', 'LUMINOUS_VIVID_PINK', 'FUCHSIA', 'GOLD', 'ORANGE', 'RED', 'GREY', 'DARKER_GREY', 'NAVY', 'DARK_AQUA', 'DARK_GREEN', 'DARK_BLUE', 'DARK_PURPLE', 'DARK_VIVID_PINK', 'DARK_GOLD', 'DARK_ORANGE', 'DARK_RED', 'DARK_GREY', 'LIGHT_GREY', 'DARK_NAVY', 'BLURPLE', 'GREYPLE', 'DARK_BUT_NOT_BLACK', 'NOT_QUITE_BLACK', 'RANDOM'];
+        const colors = Object.keys(Colors) as ColorResolvable[];
         
         return filter ? colors.filter(c => c.toString().toLowerCase().includes(filter?.toString().toLowerCase())) : colors;
     }

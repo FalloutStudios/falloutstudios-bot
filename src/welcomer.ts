@@ -1,8 +1,9 @@
-import { RecipleClient, RecipleScript } from 'reciple';
-import path from 'path';
-import yml from 'yaml';
 import { createConfig } from './_createConfig';
-import { MessageEmbed, TextBasedChannel } from 'discord.js';
+
+import { EmbedBuilder, TextBasedChannel } from 'discord.js';
+import path from 'path';
+import { RecipleClient, RecipleScript } from 'reciple';
+import yml from 'yaml';
 
 export interface WelcomerConfig {
     welcomeChannel: string;
@@ -12,7 +13,7 @@ export interface WelcomerConfig {
 }
 
 export class Welcomer implements RecipleScript {
-    public versions: string = '2.x.x';
+    public versions: string = '^3.0.0';
     public config: WelcomerConfig = Welcomer.getConfig();
     public welcome!: TextBasedChannel;
     public goodbye?: TextBasedChannel;
@@ -25,8 +26,8 @@ export class Welcomer implements RecipleScript {
         const welcome = client.channels.cache.get(this.config.welcomeChannel) ?? await client.channels.fetch(this.config.welcomeChannel).catch(() => null);
         const goodbye = client.channels.cache.get(this.config.goodByeChannel) ?? await client.channels.fetch(this.config.goodByeChannel).catch(() => null);
         
-        if (!welcome || !welcome.isText()) throw new Error('Can\'t resolve welcome text channel');
-        if (goodbye && !goodbye.isText()) throw new Error('Can\'t resolve goodbye text channel');
+        if (!welcome || !welcome.isTextBased()) throw new Error('Can\'t resolve welcome text channel');
+        if (goodbye && !goodbye.isTextBased()) throw new Error('Can\'t resolve goodbye text channel');
 
         this.welcome = welcome;
         this.goodbye = goodbye ?? undefined;
@@ -35,12 +36,12 @@ export class Welcomer implements RecipleScript {
             welcome.send({
                 content: this.config.welcomeContent || undefined,
                 embeds: [
-                    new MessageEmbed()
+                    new EmbedBuilder()
                         .setAuthor({
                             name: ` Welcome ${member.user.tag}`,
                             iconURL: member.user.displayAvatarURL()
                         })
-                        .setColor('BLURPLE')
+                        .setColor('Blurple')
                 ]
             }).catch(() => null);
         });
@@ -49,12 +50,12 @@ export class Welcomer implements RecipleScript {
             goodbye?.send({
                 content: this.config.goodByeContent || undefined,
                 embeds: [
-                    new MessageEmbed()
+                    new EmbedBuilder()
                         .setAuthor({
                             name: `${member.user} left the server`,
                             iconURL: member.user.displayAvatarURL()
                         })
-                        .setColor('GREY')
+                        .setColor('Grey')
                 ]
             }).catch(() => null);
         });

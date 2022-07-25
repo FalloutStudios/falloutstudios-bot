@@ -1,11 +1,12 @@
-import { InteractionCommandBuilder, MessageCommandBuilder, RecipleClient, RecipleCommandBuilders, RecipleScript } from 'reciple';
-import { Message, MessageEmbed } from 'discord.js';
 import { errorEmbed } from './_errorEmbed';
+
+import { EmbedBuilder, Message } from 'discord.js';
 import ms from 'ms';
+import { InteractionCommandBuilder, MessageCommandBuilder, RecipleClient, RecipleCommandBuilder, RecipleScript } from 'reciple';
 
 export default new (class implements RecipleScript {
-    public versions: string = '2.x.x';
-    public commands: RecipleCommandBuilders[] = [];
+    public versions: string = '^3.0.0';
+    public commands: RecipleCommandBuilder[] = [];
 
     public onStart(client: RecipleClient) {
         this.commands = [
@@ -31,7 +32,7 @@ export default new (class implements RecipleScript {
 
                         await interaction.deferReply();
 
-                        const reply = await interaction.fetchReply() as Message;
+                        const reply = await interaction.fetchReply();
                         await interaction.editReply({ embeds: [this.getEmbed(client, reply)] });
                     })
             ];
@@ -43,9 +44,9 @@ export default new (class implements RecipleScript {
         const latency = Date.now() - reply.createdTimestamp;
         const apiLatency = client.ws.ping;
 
-        return new MessageEmbed()
+        return new EmbedBuilder()
             .setAuthor({ name: 'Pong!', iconURL: client.user?.displayAvatarURL() })
             .setDescription(`\`\`\`bash\nBot Latency: ${ms(latency < 0 ? 0 : latency, { long: true })}\nWS Latency: ${ms(apiLatency < 0 ? 0 : apiLatency, { long: true })}\nUptime: ${ms(process.uptime() * 1000, { long: true })}\`\`\``)
-            .setColor('GREEN');
+            .setColor('Green');
     }
 })();

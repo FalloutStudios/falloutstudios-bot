@@ -1,10 +1,11 @@
+import { createConfig } from './_createConfig';
+import { errorEmbed } from './_errorEmbed';
+
+import { ActionRowBuilder, ChannelType, ColorResolvable, EmbedBuilder, Guild, Message, Role, SelectMenuBuilder, TextChannel } from 'discord.js';
 import { Logger } from 'fallout-utility';
-import yml from 'yaml';
 import path from 'path';
 import { RecipleClient, RecipleScript } from 'reciple';
-import { createConfig } from './_createConfig';
-import { ColorResolvable, Guild, Message, MessageActionRow, MessageEmbed, MessageSelectMenu, Role, TextChannel } from 'discord.js';
-import { errorEmbed } from './_errorEmbed';
+import yml from 'yaml';
 
 export interface RolesConfig {
     messages: {
@@ -28,7 +29,7 @@ export interface RolesConfig {
 }
 
 export class Roles implements RecipleScript {
-    public versions: string = '2.x.x';
+    public versions: string = '^3.0.0';
     public client?: RecipleClient;
     public config: RolesConfig = Roles.getConfig();
     public logger!: Logger;
@@ -108,19 +109,20 @@ export class Roles implements RecipleScript {
 
         await message.edit({
             content: messageConf.content || ' ',
-            embeds: embeds.filter(e => e) as MessageEmbed[],
+            embeds: embeds.filter(e => e) as EmbedBuilder[],
             components: [
-                new MessageActionRow().setComponents([
-                    this.buildMenu(messageConf.roles, messageConf.multiple, `roles_${message.id}`)
-                ])
+                new ActionRowBuilder<SelectMenuBuilder>()
+                    .setComponents(
+                        this.buildMenu(messageConf.roles, messageConf.multiple, `roles_${message.id}`)
+                    )
             ]
         });
 
         this.logger.debug(`Edited message ${messageConf.id}`);
     }
 
-    public buildMenu(menuConf: RolesConfig['messages'][0]['roles'], multiple: boolean, id: string): MessageSelectMenu {
-        const menu = new MessageSelectMenu().setCustomId(id).setPlaceholder('Select role').setMinValues(0);
+    public buildMenu(menuConf: RolesConfig['messages'][0]['roles'], multiple: boolean, id: string): SelectMenuBuilder {
+        const menu = new SelectMenuBuilder().setCustomId(id).setPlaceholder('Select role').setMinValues(0);
 
         if (multiple) menu.setMaxValues(menuConf.length).setPlaceholder('Select roles');
 
@@ -138,8 +140,8 @@ export class Roles implements RecipleScript {
         return menu;
     }
 
-    public buildEmbed(embedConf: RolesConfig['messages'][0]['embeds'][0]): MessageEmbed|undefined {
-        const embed = new MessageEmbed();
+    public buildEmbed(embedConf: RolesConfig['messages'][0]['embeds'][0]): EmbedBuilder|undefined {
+        const embed = new EmbedBuilder();
 
         if (embedConf.title) embed.setTitle(embedConf.title);
         if (embedConf.description) embed.setDescription(embedConf.description);
@@ -159,7 +161,7 @@ export class Roles implements RecipleScript {
         const channelGet = this.client?.channels.cache.get(channelId);
         const channelFetch = !!channelGet ? channelGet : await this.client?.channels.fetch(channelId).catch(() => undefined);
 
-        return channelFetch?.type === 'GUILD_TEXT' ? channelFetch : undefined;
+        return channelFetch?.type === ChannelType.GuildText ? channelFetch : undefined;
     }
 
     public static getConfig(): RolesConfig {
