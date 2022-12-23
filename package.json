@@ -1,0 +1,22 @@
+{
+    "name": "falloutstudios-bot",
+    "private": true,
+    "scripts": {
+        "clean": "npx rimraf modules",
+        "build": "npm run clean && npx tsc"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.8.0",
+        "@types/ms": "^0.7.31",
+        "discord.js": "^14.7.1",
+        "fallout-utility": "^1.5.21",
+        "ms": "^2.1.3",
+        "reciple": "^6.0.4"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.17",
+        "prisma": "^4.8.0",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.9.4"
+    }
+}
