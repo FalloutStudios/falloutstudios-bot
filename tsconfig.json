@@ -3,10 +3,13 @@
         "src/**/*"
     ],
     "compilerOptions": {
-        "target": "es2016",
-        "module": "commonjs",
+        "target": "ESNext",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "rootDir": "./src",
         "outDir": "./modules",
+        "sourceRoot": "./src",
+        "sourceMap": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,

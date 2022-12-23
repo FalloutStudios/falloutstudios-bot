@@ -1,5 +1,0 @@
-announcementsChannels:
-  - "993113712418377759"
-preventUserChatsInAnnouncementChannels: true
-sendAnnouncementsToAllChannels: true
-createThreadsForAnnouncements: true
