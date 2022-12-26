@@ -1,7 +1,7 @@
 import { AnyCommandBuilder, AnyCommandData, RecipleClient, RecipleScript, cwd, path } from 'reciple';
 import { Config, createConfig, defaultConfig } from './util/config';
 import { AnyInteractionCommandHandler } from './interactions';
-import { CachedManager, Collection, EmbedBuilder } from 'discord.js';
+import { Collection, EmbedBuilder } from 'discord.js';
 
 export abstract class BaseModule implements RecipleScript {
     public commands: (AnyCommandBuilder | AnyCommandData)[]  = [];

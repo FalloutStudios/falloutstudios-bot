@@ -1,4 +1,4 @@
-import { Awaitable, ColorResolvable } from 'discord.js';
+import { ColorResolvable } from 'discord.js';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { path } from 'reciple';
 
