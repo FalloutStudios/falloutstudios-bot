@@ -12,6 +12,7 @@
     "discord.js": "^14.8.0",
     "fallout-utility": "^2.2.1",
     "lodash.defaultsdeep": "^4.6.1",
+    "openai": "^3.2.1",
     "reciple": "^7.1.5",
     "yaml": "^2.2.1"
   },

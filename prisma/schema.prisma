@@ -3,9 +3,15 @@
 
 generator client {
   provider = "prisma-client-js"
+  output = "./prisma-client"
 }
 
 datasource db {
   provider = "sqlite"
   url      = "file:../config/database.db"
+}
+
+model ChatGPTSettings {
+    id String @id @unique
+    channelId String?
 }

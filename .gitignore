@@ -131,3 +131,5 @@ dist
 
 # Output files
 modules
+config
+prisma-client

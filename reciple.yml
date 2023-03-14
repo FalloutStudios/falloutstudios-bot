@@ -16,7 +16,7 @@ commands:
       # Allow commands to be registered globally
       registerGlobally: true
       # Allow commands to be registered a given guilds/servers
-      registerToGuilds: ['993105237000855592']
+      registerToGuilds: []
     # If enabled, the client will accept replied interactions of this type
     acceptRepliedInteractions: false
   slashCommand:
@@ -29,7 +29,7 @@ commands:
       # Allow commands to be registered globally
       registerGlobally: true
       # Allow commands to be registered a given guilds/servers
-      registerToGuilds: ['993105237000855592']
+      registerToGuilds: []
     # If enabled, the client will accept replied interactions of this type
     acceptRepliedInteractions: false
   messageCommand:
@@ -47,13 +47,13 @@ commands:
       # Allow commands to be registered globally
       registerGlobally: true
       # Allow commands to be registered a given guilds/servers
-      registerToGuilds: ['993105237000855592']
+      registerToGuilds: []
 
 # Application commands register config
 applicationCommandRegister:
   # Wether allow all application commands to be registered globally
   #   This ignores their specific configs
-  allowRegisterGlobally: false
+  allowRegisterGlobally: true
   # Wether allow all application commands to be registered to guilds
   #   This ignores their specific configs
   allowRegisterOnGuilds: true
