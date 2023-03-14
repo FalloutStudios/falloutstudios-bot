@@ -1,0 +1,4 @@
+embedColor: Blue
+errorColor: DarkButNotBlack
+anticrash:
+  reportChannels: []
