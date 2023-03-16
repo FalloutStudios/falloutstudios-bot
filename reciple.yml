@@ -32,6 +32,13 @@ commands:
       registerToGuilds: []
     # If enabled, the client will accept replied interactions of this type
     acceptRepliedInteractions: false
+  additionalApplicationCommands:
+    # Command register config
+    registerCommands:
+      # Allow commands to be registered globally
+      registerGlobally: true
+      # Allow commands to be registered a given guilds/servers
+      registerToGuilds: []
   messageCommand:
     # If false, the client will ignore this type of command when executed
     enabled: true
@@ -41,24 +48,21 @@ commands:
     commandArgumentSeparator: ' '
     # Command prefix
     prefix: '!'
-  additionalApplicationCommands:
-    # Command register config
-    registerCommands:
-      # Allow commands to be registered globally
-      registerGlobally: true
-      # Allow commands to be registered a given guilds/servers
-      registerToGuilds: []
 
 # Application commands register config
 applicationCommandRegister:
+  # If false, any application commands will not be registered
+  enabled: true
   # Wether allow all application commands to be registered globally
   #   This ignores their specific configs
   allowRegisterGlobally: true
   # Wether allow all application commands to be registered to guilds
   #   This ignores their specific configs
-  allowRegisterOnGuilds: true
+  allowRegisterToGuilds: true
   # Register empty command list
   registerEmptyCommands: true
+  # Register all application commands to guilds/servers
+  registerToGuilds: ['993105237000855592']
 
 # Logger config
 logger:
@@ -101,4 +105,4 @@ client:
     - 'MessageContent'
 
 # Don't change this value
-version: ^7.0.12
+version: ^7.1.0
