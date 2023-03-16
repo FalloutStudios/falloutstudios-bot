@@ -15,6 +15,7 @@ export interface ChatGPTConfig {
     dmAskCommand: boolean;
     queryLimit: number;
     askCooldown: number;
+    apiTimeout: number|null;
 }
 
 export class ChatGPT extends BaseModule {
@@ -77,6 +78,8 @@ export class ChatGPT extends BaseModule {
 
         const response = await this.openAI.createChatCompletion({
             model: this.config.aiModel,
+            max_tokens: 2000,
+            user: options?.author,
             messages: [
                 {
                     role: 'system',
@@ -93,7 +96,7 @@ export class ChatGPT extends BaseModule {
                     content: query
                 }
             ]
-        }).catch(async err => {
+        }, { timeout: this.config.apiTimeout || undefined }).catch(async err => {
             await Anticrash.report(err.response);
             return null;
         });

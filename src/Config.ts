@@ -60,7 +60,8 @@ export class Config extends BaseModule {
             enableAskCommand: true,
             enableChatChannels: true,
             dmAskCommand: true,
-            queryLimit: 2000
+            queryLimit: 2000,
+            apiTimeout: 1000 * 10
         }
     };
 }
