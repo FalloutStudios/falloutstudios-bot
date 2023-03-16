@@ -6,6 +6,7 @@ import { Message } from 'discord.js';
 import Utility from '../Internals/Utility.js';
 import { limitString } from 'fallout-utility';
 import Anticrash from '../Internals/Anticrash.js';
+import { Stream } from 'stream';
 
 export interface ChatGPTConfig {
     context: string;
@@ -73,13 +74,17 @@ export class ChatGPT extends BaseModule {
         data.client.removeListener('messageCreate', this._onMessageCreate);
     }
 
-    public async ask(query: string, options?: { conversationData?: (string|ChatCompletionRequestMessage)[]; author?: string; }): Promise<string> {
+    public async ask(query: string, options?: { conversationData?: (string|ChatCompletionRequestMessage)[]; author?: string; stream?: false; }): Promise<string>;
+    public async ask(query: string, options?: { conversationData?: (string|ChatCompletionRequestMessage)[]; author?: string; stream?: true; }): Promise<string|Stream>;
+    public async ask(query: string, options?: { conversationData?: (string|ChatCompletionRequestMessage)[]; author?: string; stream?: boolean; }): Promise<string|Stream> {
         if (query.length > this.config.queryLimit) return 'That\'s alot! I\'m not going to read all of that.';
 
         const response = await this.openAI.createChatCompletion({
             model: this.config.aiModel,
-            max_tokens: 2000,
+            max_tokens: 1000,
+            temperature: 0,
             user: options?.author,
+            stream: options?.stream,
             messages: [
                 {
                     role: 'system',
@@ -97,10 +102,12 @@ export class ChatGPT extends BaseModule {
                 }
             ],
             n: 1,
-        }, { timeout: this.config.apiTimeout || undefined }).catch(async err => {
+        }, { timeout: this.config.apiTimeout || undefined, responseType: options?.stream ? 'stream' : 'json' }).catch(async err => {
             await Anticrash.report(err.response);
             return null;
         });
+
+        if (response?.data instanceof Stream) return response?.data;
 
         const message = response?.data.choices.find(r => r.message?.content);
         if (!message || !message.message?.content) return 'I cannot think of a response to that at this moment.';
@@ -144,13 +151,16 @@ export class ChatGPT extends BaseModule {
                 content: m.content
             }));
 
-        const reply = await this.ask(message.content, { conversationData: conversations, author });
-        await message.reply({
-            content: reply,
-            allowedMentions: {
-                repliedUser: false
-            }
-        }).catch(err => Anticrash.report(err));
+        const reply = await message.reply({
+                content: '<a:loading:1085866420270813184>  **Generating response**',
+                allowedMentions: {
+                    repliedUser: false
+                }
+            });
+
+        const response = await this.ask(message.content, { conversationData: conversations, author});
+
+        await reply?.edit(response);
     }
 }
 
