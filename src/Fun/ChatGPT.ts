@@ -95,7 +95,8 @@ export class ChatGPT extends BaseModule {
                     name: options?.author,
                     content: query
                 }
-            ]
+            ],
+            n: 1,
         }, { timeout: this.config.apiTimeout || undefined }).catch(async err => {
             await Anticrash.report(err.response);
             return null;
@@ -144,7 +145,12 @@ export class ChatGPT extends BaseModule {
             }));
 
         const reply = await this.ask(message.content, { conversationData: conversations, author });
-        await message.reply(reply).catch(err => Anticrash.report(err));
+        await message.reply({
+            content: reply,
+            allowedMentions: {
+                repliedUser: false
+            }
+        }).catch(err => Anticrash.report(err));
     }
 }
 
