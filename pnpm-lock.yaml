@@ -9,7 +9,7 @@ specifiers:
   lodash.defaultsdeep: ^4.6.1
   openai: ^3.2.1
   prisma: ^4.11.0
-  reciple: ^7.1.5
+  reciple: ^7.1.6
   rimraf: ^4
   type-fest: ^3.6.1
   typescript: ^4
@@ -21,7 +21,7 @@ dependencies:
   fallout-utility: 2.2.1
   lodash.defaultsdeep: 4.6.1
   openai: 3.2.1
-  reciple: 7.1.5_discord.js@14.8.0
+  reciple: 7.1.6_discord.js@14.8.0
   yaml: 2.2.1
 
 devDependencies:
@@ -121,8 +121,8 @@ packages:
     resolution: {integrity: sha512-0AEBi2HXGV02cf6ASsBPhfsVIbVSDC9nbQed4iiY5eHttW9ZtMxHThuKZE1pnESbr8HRdgmFSa/Kn4OSNYuibg==}
     requiresBuild: true
 
-  /@reciple/client/7.0.12_discord.js@14.8.0:
-    resolution: {integrity: sha512-RXnxRYDhpP2dMR5h3BYL28oVWTETsstFoaGTVslHB4wjD3o4MF5sKWJLbh3B4MBE5L0cfv7Bby9VG/aNptBxvw==}
+  /@reciple/client/7.1.0_discord.js@14.8.0:
+    resolution: {integrity: sha512-HNLuBXVk1EjeviLw4pTQ9tMgKANT68gj/kUZp5pk+gsrO+sRqXnuZ0UFRrz0U5F5gwaOfiyqU/Wow806+SvsIw==}
     peerDependencies:
       discord.js: ^14.7.1
     dependencies:
@@ -590,13 +590,13 @@ packages:
       readable-stream: 3.6.2
     dev: false
 
-  /reciple/7.1.5_discord.js@14.8.0:
-    resolution: {integrity: sha512-+AslRnAjrDupw2KrHjStSThaoKPWGd6Ty2e7hEK8sHs8FR0bAKqGcE+iFvyivkz7P/J7UDv34c/BWjoG9NQOnw==}
+  /reciple/7.1.6_discord.js@14.8.0:
+    resolution: {integrity: sha512-0b8bw8ArhSt5fURG5bY9xPyjAo1sYUhSPppLDKm9p+levboxYWOqD6ijG0S5XIy9q2DB8EKgzc97XBbsw+cUDA==}
     hasBin: true
     peerDependencies:
       discord.js: ^14.7.1
     dependencies:
-      '@reciple/client': 7.0.12_discord.js@14.8.0
+      '@reciple/client': 7.1.0_discord.js@14.8.0
       '@types/prompts': 2.4.3
       chalk: 4.1.2
       commander: 10.0.0

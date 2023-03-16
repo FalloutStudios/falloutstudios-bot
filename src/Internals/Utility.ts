@@ -26,7 +26,7 @@ export class Utility extends BaseModule {
         await setTimeout(options?.timer || 5000);
 
         await reply?.delete().catch(() => {});
-        if (options?.deleteReferenceMessage === false) await message.delete().catch(() => {});
+        if (options?.deleteReferenceMessage !== false) await message.delete().catch(() => {});
     }
 }
 
