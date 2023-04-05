@@ -9,6 +9,7 @@ export class Ban extends BaseModule {
             new SlashCommandBuilder()
                 .setName('ban')
                 .setDescription('Ban a member')
+                .setRequiredMemberPermissions('BanMembers')
                 .addUserOption(member => member
                     .setName('target')
                     .setDescription('User to ban')

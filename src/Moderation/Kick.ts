@@ -8,6 +8,7 @@ export class Kick extends BaseModule {
             new SlashCommandBuilder()
                 .setName('kick')
                 .setDescription('Kick a member')
+                .setRequiredMemberPermissions('KickMembers')
                 .addUserOption(member => member
                     .setName('target')
                     .setDescription('User to kick')
