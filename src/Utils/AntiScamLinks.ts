@@ -99,7 +99,7 @@ export class AntiScamLinks extends BaseModule {
             let reportChannel = this.config.reportChannel.channelId
                                 ? await Utility.resolveFromCachedManager(this.config.reportChannel.channelId, this.client.channels) as TextBasedChannel
                                 : null;
-            reportChannel = !reportChannel || !reportChannel?.isTextBased() ? reportChannel : null;
+            reportChannel = reportChannel && reportChannel?.isTextBased() ? reportChannel : null;
 
             const reportMessage = Utility.replaceMessagePlaceholders(this.config.reportChannel.messageData, message, { additionalPlaceholders: placeholders });
 
