@@ -66,6 +66,8 @@ export class AntiScamLinks extends BaseModule {
         const matchedScamLinks = this.linksManager.getMatches(message.content);
         if (!matchedScamLinks.length) return;
 
+        await message.delete().catch(() => null);
+
         const placeholders = {
             'scamlinks': matchedScamLinks.map(s => inlineCode(s)).join('\n')
         };
