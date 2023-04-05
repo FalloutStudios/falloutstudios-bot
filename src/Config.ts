@@ -61,7 +61,7 @@ export class Config extends BaseModule {
                         {
                             title: 'Anti scam links',
                             description: '{message_content}',
-                            color: resolveColor('Purple'),
+                            color: resolveColor('Red'),
                             fields: [
                                 {
                                     name: 'Author',
