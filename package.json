@@ -12,7 +12,6 @@
     "discord.js": "^14.8.0",
     "fallout-utility": "^2.2.1",
     "lodash.defaultsdeep": "^4.6.1",
-    "openai": "^3.2.1",
     "reciple": "^7.1.6",
     "yaml": "^2.2.1"
   },
@@ -20,8 +19,8 @@
     "@types/lodash.defaultsdeep": "^4.6.7",
     "@types/node": "^18.15.1",
     "prisma": "^4.11.0",
-    "rimraf": "^4",
+    "rimraf": "^4.4.0",
     "type-fest": "^3.6.1",
-    "typescript": "^4"
+    "typescript": "^5.0.2"
   }
 }

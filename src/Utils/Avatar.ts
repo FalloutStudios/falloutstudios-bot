@@ -53,7 +53,8 @@ export class Avatar extends BaseModule {
         return new EmbedBuilder()
             .setTitle(`${name} | Avatar`)
             .setColor(Config.config.embedColor)
-            .setImage(user.displayAvatarURL({ extension: 'gif', size: 1024 }));
+            .setURL(user.displayAvatarURL({ size: 1024 }))
+            .setImage(user.displayAvatarURL({ size: 1024 }));
     }
 }
 

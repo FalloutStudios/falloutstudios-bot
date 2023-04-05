@@ -6,16 +6,14 @@ import path from 'path';
 import yml from 'yaml';
 import { writeFileSync } from 'fs';
 import defaultsDeep from 'lodash.defaultsdeep';
-import { PartialDeep } from 'type-fest';
 import { ColorResolvable } from 'discord.js';
-import { ChatGPTConfig } from './Fun/ChatGPT.js';
+import { PartialDeep } from 'type-fest';
 
 export interface BotConfig {
     embedColor: ColorResolvable;
     errorColor: ColorResolvable;
 
     anticrash: AnticrashConfig;
-    chatgpt: ChatGPTConfig;
 }
 
 export class Config extends BaseModule {
@@ -52,16 +50,6 @@ export class Config extends BaseModule {
         errorColor: 'DarkButNotBlack',
         anticrash: {
             reportChannels: []
-        },
-        chatgpt: {
-            context: 'You are a cool chatbot in discord',
-            aiModel: 'gpt-3.5-turbo',
-            askCooldown: 10000,
-            enableAskCommand: true,
-            enableChatChannels: true,
-            dmAskCommand: true,
-            queryLimit: 2000,
-            apiTimeout: null
         }
     };
 }
