@@ -1,5 +1,5 @@
 import { DiscordScamLinks } from '@falloutstudios/djs-scam-links';
-import { BanOptions, BaseMessageOptions, Message, TextBasedChannel, inlineCode } from 'discord.js';
+import { BanOptions, BaseMessageOptions, Message, PartialMessage, TextBasedChannel, inlineCode } from 'discord.js';
 import BaseModule from '../BaseModule.js';
 import { RecipleClient, RecipleModuleScriptUnloadData } from 'reciple';
 import Config from '../Config.js';
@@ -39,7 +39,9 @@ export class AntiScamLinks extends BaseModule {
 
     constructor() {
         super();
+
         this.checkMessage = this.checkMessage.bind(this);
+        this.checkUpdatedMessage = this.checkUpdatedMessage.bind(this);
     }
 
     public async onStart(client: RecipleClient<boolean>): Promise<boolean> {
@@ -50,10 +52,12 @@ export class AntiScamLinks extends BaseModule {
 
     public async onLoad(client: RecipleClient<boolean>): Promise<void> {
         client.on('messageCreate', this.checkMessage);
+        client.on('messageUpdate', this.checkUpdatedMessage);
     }
 
     public async onUnload(data: RecipleModuleScriptUnloadData): Promise<void> {
         this.client.removeListener('messageCreate', this.checkMessage);
+        this.client.removeListener('messageUpdate', this.checkUpdatedMessage);
     }
 
     public async checkMessage(message: Message): Promise<void> {
@@ -100,5 +104,9 @@ export class AntiScamLinks extends BaseModule {
 
             if (reportChannel) await reportChannel.send(reportMessage).catch(() => null);
         }
+    }
+
+    public async checkUpdatedMessage(oldMessage: PartialMessage, newMessage: Message): Promise<void> {
+        return this.checkMessage(newMessage);
     }
 }
