@@ -82,6 +82,7 @@ export class Utility extends BaseModule {
         data = this.replaceUserPlaceholders(data, message.author, {
             prefix: `${prefix}_author`,
             additionalPlaceholders: {
+                ...options?.additionalPlaceholders,
                 [`${prefix}_id`]: message.id,
                 [`${prefix}_content`]: message.content,
                 [`${prefix}_embeds_size`]: String(message.embeds.length)
