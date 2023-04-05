@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npx rimraf ./modules && npx tsc",
-    "start": "npx reciple",
+    "build": "pnpm exec rimraf ./modules && pnpm exec tsc",
+    "start": "pnpm exec reciple",
     "test": "pnpm run build && pnpm run start --debugmode"
   },
   "dependencies": {
