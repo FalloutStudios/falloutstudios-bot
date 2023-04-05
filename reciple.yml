@@ -62,7 +62,7 @@ applicationCommandRegister:
   # Register empty command list
   registerEmptyCommands: true
   # Register all application commands to guilds/servers
-  registerToGuilds: ['993105237000855592']
+  registerToGuilds: []
 
 # Logger config
 logger:
@@ -86,16 +86,9 @@ modules:
   modulesFolders: ['./modules', './modules/*']
   # Excluded files or folders
   #   You can add the file/folder name or use glob patterns
-  exclude: ['BaseModule.js', '_*']
+  exclude: ['_*', 'BaseModule.js']
   # If false, the client will still load unsupported modules
   disableModuleVersionCheck: false
-  # Resolve files in modules folder with ".ts" file extension
-  #   This feature is experimental
-  typescriptModules:
-    enabled: false
-    compilerOptions:
-      target: ESNext
-      module: NodeNext
 
 # Discord.js client options
 client:
@@ -105,4 +98,4 @@ client:
     - 'MessageContent'
 
 # Don't change this value
-version: ^7.1.0
+version: ^7.2.0
