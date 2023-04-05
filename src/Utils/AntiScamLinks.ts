@@ -46,7 +46,6 @@ export class AntiScamLinks extends BaseModule {
 
     public async onStart(client: RecipleClient<boolean>): Promise<boolean> {
         this.client = client;
-
         return true;
     }
 
@@ -110,3 +109,5 @@ export class AntiScamLinks extends BaseModule {
         return this.checkMessage(newMessage);
     }
 }
+
+export default new AntiScamLinks();
