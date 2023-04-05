@@ -8,19 +8,19 @@
     "test": "pnpm run build && pnpm run start --debugmode"
   },
   "dependencies": {
-    "@prisma/client": "^4.11.0",
-    "discord.js": "^14.8.0",
-    "fallout-utility": "^2.2.1",
+    "@prisma/client": "^4.12.0",
+    "discord.js": "^14.9.0",
+    "fallout-utility": "^2.3.0",
     "lodash.defaultsdeep": "^4.6.1",
-    "reciple": "^7.1.6",
+    "reciple": "^7.1.11",
     "yaml": "^2.2.1"
   },
   "devDependencies": {
     "@types/lodash.defaultsdeep": "^4.6.7",
-    "@types/node": "^18.15.1",
-    "prisma": "^4.11.0",
-    "rimraf": "^4.4.0",
-    "type-fest": "^3.6.1",
-    "typescript": "^5.0.2"
+    "@types/node": "^18.15.11",
+    "prisma": "^4.12.0",
+    "rimraf": "^4.4.1",
+    "type-fest": "^3.7.2",
+    "typescript": "^5.0.3"
   }
 }
