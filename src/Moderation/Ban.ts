@@ -49,3 +49,5 @@ export class Ban extends BaseModule {
         return true;
     }
 }
+
+export default new Ban();

@@ -38,3 +38,5 @@ export class Kick extends BaseModule {
         return true;
     }
 }
+
+export default new Kick();
