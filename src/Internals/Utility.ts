@@ -1,8 +1,9 @@
-import { RecipleClient } from 'reciple';
-import BaseModule from '../BaseModule.js';
-import { Collection, Message, MessageReplyOptions } from 'discord.js';
+import { Channel, Collection, Guild, Message, MessageReplyOptions, User } from 'discord.js';
 import { PrismaClient } from '../../prisma/prisma-client/index.js';
+import { recursiveObjectReplaceValues } from 'fallout-utility';
 import { setTimeout } from 'timers/promises';
+import BaseModule from '../BaseModule.js';
+import { RecipleClient } from 'reciple';
 
 export class Utility extends BaseModule {
     public client!: RecipleClient;
@@ -27,6 +28,70 @@ export class Utility extends BaseModule {
 
         await reply?.delete().catch(() => {});
         if (options?.deleteReferenceMessage !== false) await message.delete().catch(() => {});
+    }
+
+    public replacePlaceholders<T extends string|object>(data: T, placeholders: Record<string, string>): T {
+        return recursiveObjectReplaceValues(data, Object.keys(placeholders).map(s => !(s.startsWith('{') && s.endsWith('}')) ? `{${s}}` : s), Object.values(placeholders));
+    }
+
+    public replaceUserPlaceholders<T extends string|object>(data: T, user: User, options?: { additionalPlaceholders?: Record<string, string>; prefix?: string; }): T {
+        const prefix = options?.prefix || 'user';
+
+        return this.replacePlaceholders(data, {
+            ...options?.additionalPlaceholders,
+            [`${prefix}_id`]: user.id,
+            [`${prefix}_username`]: user.username,
+            [`${prefix}_discriminator`]: user.discriminator,
+            [`${prefix}_avatar`]: user.displayAvatarURL(),
+            [`${prefix}_mention`]: user.toString()
+        });
+    }
+
+    public replaceChannelPlaceholders<T extends string|object>(data: T, channel: Channel, options?: { additionalPlaceholders?: Record<string, string>; prefix?: string; }): T {
+        const prefix = options?.prefix || 'channel';
+        const placeholders = {
+            ...options?.additionalPlaceholders,
+            [`${prefix}_id`]: channel.id,
+            [`${prefix}_name`]: !channel.isDMBased() ? channel.name : '',
+            [`${prefix}_mention`]: !channel.isDMBased() ? channel.toString() : ''
+        };
+
+        return channel.isDMBased()
+            ? this.replacePlaceholders(data, placeholders)
+            : this.replaceGuildPlaceholders(data, channel.guild, {
+                prefix: `${prefix}_guild`,
+                additionalPlaceholders: placeholders
+            });
+    }
+
+    public replaceGuildPlaceholders<T extends string|object>(data: T, guild: Guild, options?: { additionalPlaceholders?: Record<string, string>; prefix?: string; }): T {
+        const prefix = options?.prefix || 'guild';
+
+        return this.replacePlaceholders(data, {
+            ...options?.additionalPlaceholders,
+            [`${prefix}_id`]: guild.id,
+            [`${prefix}_name`]: guild.name,
+            [`${prefix}_icon`]: guild.iconURL() || '',
+            [`${prefix}_owner_id`]: guild.ownerId
+        });
+    }
+
+    public replaceMessagePlaceholders<T extends string|object>(data: T, message: Message, options?: { additionalPlaceholders?: Record<string, string>; prefix?: string; }): T {
+        const prefix = options?.prefix || 'message';
+
+        data = this.replaceUserPlaceholders(data, message.author, {
+            prefix: `${prefix}_author`,
+            additionalPlaceholders: {
+                [`${prefix}_id`]: message.id,
+                [`${prefix}_content`]: message.content,
+                [`${prefix}_embeds_size`]: String(message.embeds.length)
+            }
+        });
+
+        if (message.channel) data = this.replaceChannelPlaceholders(data, message.channel, { prefix: `${prefix}_channel` });
+        if (message.guild) data = this.replaceGuildPlaceholders(data, message.guild, { prefix: `${prefix}_guild` });
+
+        return data;
     }
 }
 

@@ -6,14 +6,16 @@ import path from 'path';
 import yml from 'yaml';
 import { writeFileSync } from 'fs';
 import defaultsDeep from 'lodash.defaultsdeep';
-import { ColorResolvable } from 'discord.js';
+import { ColorResolvable, resolveColor } from 'discord.js';
 import { PartialDeep } from 'type-fest';
+import { AntiScamLinksConfig } from './Utils/AntiScamLinks.js';
 
 export interface BotConfig {
     embedColor: ColorResolvable;
     errorColor: ColorResolvable;
 
     anticrash: AnticrashConfig;
+    antiScamLinks: AntiScamLinksConfig;
 }
 
 export class Config extends BaseModule {
@@ -50,6 +52,44 @@ export class Config extends BaseModule {
         errorColor: 'DarkButNotBlack',
         anticrash: {
             reportChannels: []
+        },
+        antiScamLinks: {
+            reportChannel: {
+                channelId: null,
+                messageData: {
+                    embeds: [
+                        {
+                            title: 'Anti scam links',
+                            description: '{message_content}',
+                            color: resolveColor('Purple'),
+                            fields: [
+                                {
+                                    name: 'Author',
+                                    value: '{message_author_mention} `{message_author_id}`',
+                                    inline: true
+                                },
+                                {
+                                    name: 'Matched Links',
+                                    value: '{scamlinks}',
+                                    inline: true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            messageReply: {
+                enabled: true,
+                messageData: {
+                    content: '{message_author_mention} You message contains flagged scam links.'
+                },
+                deleteAfterMs: 10000
+            },
+            punishment: {
+                type: 'Timeout',
+                durationMs: 60000,
+                reason: 'Sending scam links'
+            }
         }
     };
 }
