@@ -14,23 +14,38 @@ export class Encrypt extends BaseModule {
                     await interaction.showModal(this.encryptModal());
                 }),
             new ContextMenuCommandBuilder()
+                .setName('Encrypt')
+                .setType(ApplicationCommandType.Message)
+                .setDMPermission(true)
+                .setExecute(async ({ interaction }) => {
+                    await interaction.showModal(this.encryptModal('EncryptWithoutText', interaction.targetId));
+                }),
+            new ContextMenuCommandBuilder()
                 .setName('Decrypt')
                 .setType(ApplicationCommandType.Message)
                 .setDMPermission(true)
                 .setExecute(async ({ interaction }) => {
-                    await interaction.showModal(this.encryptModal(true, interaction.targetId));
+                    await interaction.showModal(this.encryptModal('Decrypt', interaction.targetId));
                 })
         ];
 
         this.interactionEvents = [
             {
                 type: 'ModalSubmit',
-                customId: 'encrypt-modal',
+                customId: id => id.startsWith('encrypt-modal'),
                 execute: async interaction => {
-                    const text = interaction.fields.getTextInputValue('text');
-                    const key = interaction.fields.getTextInputValue('key');
-
                     await interaction.deferReply({ ephemeral: true });
+
+                    const messageId: string|undefined = interaction.customId.split('-')[2];
+                    const message = messageId ? interaction.channel?.messages.cache.get(messageId) ?? await interaction.channel?.messages.fetch(messageId).catch(() => null) : null;
+
+                    if (messageId && !message?.content) {
+                        await interaction.editReply('Unable to resolve message content to encrypt');
+                        return;
+                    }
+
+                    const text = message?.content ?? interaction.fields.getTextInputValue('text');
+                    const key = interaction.fields.getTextInputValue('key');
 
                     const encrypted = `${interaction.inGuild() ? interaction.user.toString() + ' **Sent an encrypted message**\n' : ''}${Encryption.encrypt(text, key)}`;
 
@@ -91,7 +106,7 @@ export class Encrypt extends BaseModule {
                 type: 'Button',
                 customId: 'decrypt-button',
                 execute: async interaction => {
-                    await interaction.showModal(this.encryptModal(true, interaction.message.id));
+                    await interaction.showModal(this.encryptModal('Decrypt', interaction.message.id));
                 }
             }
         ];
@@ -99,15 +114,17 @@ export class Encrypt extends BaseModule {
         return true;
     }
 
-    public encryptModal(decrypt: true, messageId: string): APIModalInteractionResponseCallbackData;
-    public encryptModal(decrypt?: false): APIModalInteractionResponseCallbackData;
-    public encryptModal(decrypt?: boolean, messageId?: string): APIModalInteractionResponseCallbackData {
+
+    public encryptModal(type?: undefined): APIModalInteractionResponseCallbackData;
+    public encryptModal(type: 'Encrypt'): APIModalInteractionResponseCallbackData;
+    public encryptModal(type: 'Decrypt'|'EncryptWithoutText', messageId: string): APIModalInteractionResponseCallbackData;
+    public encryptModal(type: 'Decrypt'|'Encrypt'|'EncryptWithoutText' = 'Encrypt', messageId?: string): APIModalInteractionResponseCallbackData {
         const modal = new ModalBuilder({
-            title: decrypt ? 'Decrypt Message' : 'Encrypt Message',
-            custom_id: decrypt ? `decrypt-modal-${messageId}` : 'encrypt-modal'
+            title: type === 'Decrypt' ? 'Decrypt Message' : 'Encrypt Message',
+            custom_id: type === 'Decrypt' ? `decrypt-modal-${messageId}` : `encrypt-modal${type === 'EncryptWithoutText' ? ('-' + messageId) : ''}`
         });
 
-        if (!decrypt) {
+        if (type === 'Encrypt') {
             modal.addComponents({
                 type: ComponentType.ActionRow,
                 components: [
