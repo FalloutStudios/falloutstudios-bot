@@ -22,7 +22,7 @@ export class Clear extends BaseModule {
                         return;
                     }
 
-                    await interaction.editReply(`Deleting **${messages.size}** message(s)`);
+                    await interaction.editReply(`Deleting **${messages.size}** message${messages.size > 1 ? 's' : ''}`);
 
                     let deletedSize: number = 0;
 
