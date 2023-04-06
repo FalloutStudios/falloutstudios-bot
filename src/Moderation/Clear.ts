@@ -6,7 +6,7 @@ export class Clear extends BaseModule {
     public async onStart(client: RecipleClient<boolean>): Promise<boolean> {
         this.commands.push(
             new ContextMenuCommandBuilder()
-                .setName('Del Msgs Below')
+                .setName('Clear Msgs Below')
                 .setRequiredMemberPermissions('ManageMessages')
                 .setType(ApplicationCommandType.Message)
                 .setExecute(async ({ interaction }) => {
