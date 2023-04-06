@@ -91,8 +91,7 @@ export class Encrypt extends BaseModule {
                 type: 'Button',
                 customId: 'decrypt-button',
                 execute: async interaction => {
-                    const messageId = interaction.customId.split('-')[2];
-                    await interaction.showModal(this.encryptModal(true, messageId));
+                    await interaction.showModal(this.encryptModal(true, interaction.message.id));
                 }
             }
         ];
