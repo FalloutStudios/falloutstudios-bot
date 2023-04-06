@@ -1,6 +1,6 @@
 import { RecipleClient, RecipleModuleScriptUnloadData } from 'reciple';
 import BaseModule from '../BaseModule.js';
-import { Interaction } from 'discord.js';
+import { CommandInteraction, Interaction } from 'discord.js';
 import { AnyCommandInteractionListener, AnyComponentInteractionListener, AnyInteractionListener } from './_InteractionEventTypes.js';
 import { Logger } from 'fallout-utility';
 
@@ -38,6 +38,16 @@ export class ModuleInteractions extends BaseModule {
 
             for (const listener of script.interactionEvents) {
                 if (!ModuleInteractions.isCommandInteractionEvent(listener) && !ModuleInteractions.isComponentInteractionEvent(listener)) continue;
+
+                if (ModuleInteractions.isCommandInteractionEvent(listener) && ModuleInteractions.hasCommandName(interaction)) {
+                    if (!listener.commandName) continue;
+                    if (typeof listener.commandName === 'function' ? !listener.commandName(interaction.commandName, interaction as never) : listener.commandName !== interaction.commandName) continue;
+                }
+
+                if (ModuleInteractions.isComponentInteractionEvent(listener) && ModuleInteractions.hasCustomId(interaction)) {
+                    if (!listener.customId) continue;
+                    if (typeof listener.customId === 'function' ? !listener.customId(interaction.customId, interaction as never) : listener.customId !== interaction.customId) continue;
+                }
 
                 (async () => {
                     switch(listener.type) {
@@ -90,6 +100,14 @@ export class ModuleInteractions extends BaseModule {
 
     public static isComponentInteractionEvent(eventListener: AnyInteractionListener): eventListener is AnyComponentInteractionListener {
         return eventListener.type === 'Button' || eventListener.type === 'ModalSubmit' || eventListener.type === 'SelectMenu' || eventListener.type === 'ChannelSelectMenu' || eventListener.type === 'RoleSelectMenu' || eventListener.type === 'StringSelectMenu' || eventListener.type === 'UserSelectMenu';
+    }
+
+    public static hasCommandName<T>(interaction: T): interaction is T & { commandName: string; } {
+        return !!(interaction as any)?.commandName;
+    }
+
+    public static hasCustomId<T>(interaction: T): interaction is T & { customId: string; } {
+        return !!(interaction as any)?.customId;
     }
 }
 
