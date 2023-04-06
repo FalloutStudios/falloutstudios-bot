@@ -36,8 +36,9 @@ export class Encrypt extends BaseModule {
                 execute: async interaction => {
                     await interaction.deferReply({ ephemeral: true });
 
+                    const channel = interaction.inGuild() ? interaction.channel : interaction.user.dmChannel;
                     const messageId: string|undefined = interaction.customId.split('-')[2];
-                    const message = messageId ? interaction.channel?.messages.cache.get(messageId) ?? await interaction.channel?.messages.fetch(messageId).catch(() => null) : null;
+                    const message = messageId ? channel?.messages.cache.get(messageId) ?? await channel?.messages.fetch(messageId).catch(() => null) : null;
 
                     if (messageId && !message?.content) {
                         await interaction.editReply('Unable to resolve message content to encrypt');
@@ -79,8 +80,9 @@ export class Encrypt extends BaseModule {
                 execute: async interaction => {
                     await interaction.deferReply({ ephemeral: true });
 
+                    const channel = interaction.inGuild() ? interaction.channel : interaction.user.dmChannel;
                     const messageId = interaction.customId.split('-')[2];
-                    const message = interaction.channel?.messages.cache.get(messageId) ?? await interaction.channel?.messages.fetch(messageId).catch(() => null);
+                    const message = channel?.messages.cache.get(messageId) ?? await channel?.messages.fetch(messageId).catch(() => null);
 
                     if (!message || !message.content) {
                         await interaction.editReply('Unable to resolve encrypted message');
