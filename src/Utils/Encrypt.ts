@@ -9,21 +9,18 @@ export class Encrypt extends BaseModule {
             new SlashCommandBuilder()
                 .setName('encrypt')
                 .setDescription('Encrypt a string with a password')
-                .setDMPermission(true)
                 .setExecute(async ({ interaction }) => {
                     await interaction.showModal(this.encryptModal());
                 }),
             new ContextMenuCommandBuilder()
                 .setName('Encrypt')
                 .setType(ApplicationCommandType.Message)
-                .setDMPermission(true)
                 .setExecute(async ({ interaction }) => {
                     await interaction.showModal(this.encryptModal('EncryptWithoutText', interaction.targetId));
                 }),
             new ContextMenuCommandBuilder()
                 .setName('Decrypt')
                 .setType(ApplicationCommandType.Message)
-                .setDMPermission(true)
                 .setExecute(async ({ interaction }) => {
                     await interaction.showModal(this.encryptModal('Decrypt', interaction.targetId));
                 })
@@ -36,9 +33,8 @@ export class Encrypt extends BaseModule {
                 execute: async interaction => {
                     await interaction.deferReply({ ephemeral: true });
 
-                    const channel = interaction.inGuild() ? interaction.channel : interaction.user.dmChannel;
                     const messageId: string|undefined = interaction.customId.split('-')[2];
-                    const message = messageId ? channel?.messages.cache.get(messageId) ?? await channel?.messages.fetch(messageId).catch(() => null) : null;
+                    const message = messageId ? interaction.channel?.messages.cache.get(messageId) ?? await interaction.channel?.messages.fetch(messageId).catch(() => null) : null;
 
                     if (messageId && !message?.content) {
                         await interaction.editReply('Unable to resolve message content to encrypt');
@@ -80,9 +76,8 @@ export class Encrypt extends BaseModule {
                 execute: async interaction => {
                     await interaction.deferReply({ ephemeral: true });
 
-                    const channel = interaction.inGuild() ? interaction.channel : interaction.user.dmChannel;
                     const messageId = interaction.customId.split('-')[2];
-                    const message = channel?.messages.cache.get(messageId) ?? await channel?.messages.fetch(messageId).catch(() => null);
+                    const message = interaction.channel?.messages.cache.get(messageId) ?? await interaction.channel?.messages.fetch(messageId).catch(() => null);
 
                     if (!message || !message.content) {
                         await interaction.editReply('Unable to resolve encrypted message');
