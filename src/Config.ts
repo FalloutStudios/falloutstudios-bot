@@ -1,13 +1,12 @@
 import { RecipleClient, cwd } from 'reciple';
 import BaseModule from './BaseModule.js';
 import { AnticrashConfig } from './Internals/Anticrash.js';
-import { createReadFile } from 'fallout-utility';
+import { createReadFile, PartialDeep } from 'fallout-utility';
 import path from 'path';
 import yml from 'yaml';
 import { writeFileSync } from 'fs';
 import defaultsDeep from 'lodash.defaultsdeep';
 import { ColorResolvable, resolveColor } from 'discord.js';
-import { PartialDeep } from 'type-fest';
 import { AntiScamLinksConfig } from './Utils/AntiScamLinks.js';
 
 export interface BotConfig {

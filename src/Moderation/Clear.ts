@@ -4,7 +4,7 @@ import { ApplicationCommandType, Collection, Message, PartialMessage } from 'dis
 
 export class Clear extends BaseModule {
     public async onStart(client: RecipleClient<boolean>): Promise<boolean> {
-        this.commands.push(
+        this.commands = [
             new ContextMenuCommandBuilder()
                 .setName('Clear Msgs Below')
                 .setRequiredMemberPermissions('ManageMessages')
@@ -53,7 +53,7 @@ export class Clear extends BaseModule {
                         )
                     );
                 })
-        );
+        ];
 
         return true;
     }
